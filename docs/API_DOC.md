@@ -2,9 +2,19 @@
 [TOC]
 #  契约锁私有云 API 接口文档
 
-**发布时间**：2019-07-04
+**发布时间**：2019-09-19
 
-**发布版本**：3.3.0
+**发布版本**：4.0.0
+
+**更新内容**：
+
+>1.公章签署支持只盖骑缝章
+>
+>2.新增接口支持未签署合同删除文件
+>
+>3.签署页面支持签署完成后跳转
+>
+>4.新增草稿合同填参
 
 # 1 合同接口
 
@@ -28,8 +38,10 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- | -------- |
 | file | File | 是 | 文档文件 |
 | title | String | 是 | 合同文档名称 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
 
-响应:
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID参数不用添加）请见本文档 1.1.3.2 添加水印
 
 | 名称 | 类型 | 描述 |
 | -------- | -------- | -------- |
@@ -62,7 +74,10 @@ Content-Disposition: form-data; name="title"
 
 测试文档
 ----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="waterMarks"
 
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -92,6 +107,10 @@ Content-Type： multipart/form-data
 | templateId | Long | 是 | 模板ID；在签章平台的【文件模板】中查看 |
 | params | String | 否 | 模板参数，json格式字符串；如：{"paramer1":"value1","paramer2":"value2"} |
 | title | String | 否 | 合同文档名称,默认使用模板名称 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
 
 当使用HTML模板时，参数params注意事项如下：
 >参数类型是单行文本时，value大小不超过300,如：{"单行文本":"value1"};<br>
@@ -99,7 +118,7 @@ Content-Type： multipart/form-data
 >参数类型是身份证号，value只能是15或18位的数字或字母，如：{"身份证":"123456789123456789；"};<br>
 >参数类型是单选，value只能是单选的选项,如：{"单选":"val1"};<br>
 >参数类型是多选，value只能是多选的选项，多个value用逗号隔开，如：{"多选":"val1,val2"};<br>
->参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式按照模板上表格填参，如：{"表格":"[["1","11","2","22"],["3","33","4","44"]]"}。
+>参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式是一维数组，数组的每项对应表格的每行，每行格式是key-value格式，key是表格每列的列名如：[{\"key1\":\"1\",\"key2\":\"2\",\"key3\":\"3\",\"key4\":\"4\"},{\"key1\":\"5\",\"key2\":\"6\",\"key3\":\"7\",\"key4\":\"8\"}]。
 
 响应:
 
@@ -135,7 +154,10 @@ Content-Disposition: form-data; name="params"
 
 {"参数1":"公司1"}
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
 
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -164,6 +186,10 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- | -------- |
 | html | String | 是 | html报文 |
 | title | String | 是 | 合同文档名称 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]|
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
 
 注意：如果上传的html创建的文档出现乱码问题，需要在HTML报文中添加 <meta http-equiv="content-type" content="text/html;charset=utf-8"> 
 
@@ -201,7 +227,10 @@ Content-Disposition: form-data; name="title"
 
 html文档
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
 
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -230,6 +259,10 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- | -------- |
 | files | Array[File] | 是 | 多个文件 |
 | title | String | 是 | 合同文档名称 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
 
 响应:
 
@@ -268,7 +301,10 @@ Content-Disposition: form-data; name="title"
 
 合并文档
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
 
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -280,6 +316,220 @@ Content-Disposition: form-data; name="title"
   "message": "SUCCESS"
 }
 ```
+
+#### 1.1.1.5 根据路径创建合同文档
+
+描述：根据文件路径创建文档（文件路径可以是服务器本地文件路径或网络文件路径），返回合同文档ID，合同文档在创建合同时用到。生成的合同文档的内容顺序与参数中文件顺序一致。支持的文件类型包括：doc, docx, txt, pdf, png, gif, jpg, jpeg, tiff, html。
+
+Request URL： /document/createbyurl
+
+Request Method： POST
+
+Content-Type： multipart/form-data
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| url | String | 是 | 文件路径 |
+| title | String | 是 | 合同文档名称 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| documentId | String | 合同文档ID |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+```HTTP
+
+POST /document/createbyurl HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a
+x-qys-timestamp: 0
+Cache-Control: no-cache
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="url"
+
+http://d.hiphotos.baidu.com/image/pic/item/f636afc379310a55f00f421ab94543a982261030.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="title"
+
+路径文档
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
+
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+响应示例：
+
+```javascript
+{
+  "code": 0,
+  "documentId": "2407437103157690373",
+  "message": "SUCCESS"
+}
+```
+
+#### 1.1.1.6 根据文件类型创建合同文档
+
+描述：调用接口须填写文件类型，用文件创建合同文档。支持的文件类型包括：doc, docx, txt, pdf, png, gif, jpg, jpeg, tiff, html, rtf, xls。注：由于合同文件以PDF格式保存，所以推荐使用PDF格式的文件来创建合同文档，使用其他格式的文件需要先转换成PDF格式再创建，效率较低。（文档ID在后续接口会用到）。
+
+Request URL： /v2/document/createbyfile
+
+Request Method： POST
+
+Content-Type： multipart/form-data
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| file | File | 是 | 文档文件 |
+| title | String | 是 | 合同文档名称 |
+| fileType | String | 是 | 文件类型：doc, docx, txt, pdf, png, gif, jpg, jpeg, tiff, html, rtf, xls |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result | Document | 合同文档 |
+
+Document:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| documentId | Long | 文档Id |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+```HTTP
+
+POST /v2/document/createbyfile HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a78
+x-qys-timestamp: 0
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="/D:/授权.pdf
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+测试文档
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="fileType"
+
+pdf
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
+
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+响应示例：
+
+```javascript
+{
+    "result": {
+        "documentId": "2598725910263943175"
+    },
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
+
+####1.1.1.7 用文件创建发起方可见附件文档
+描述：用文件创建发起方可见的文档，该文档作为内部附件使用，只供发起方内部查看、盖章时的参考文件。支持的文件类型包括：doc, docx, txt, pdf, png, gif, jpg, jpeg, tiff, html。注：由于合同文件以PDF格式保存，所以推荐使用PDF格式的文件来创建合同文档，使用其他格式的文件需要先转换成PDF格式再创建，效率较低。（文档ID在后续接口会用到）。
+
+Request URL： /document/createsponsorfile
+
+Request Method： POST
+
+Content-Type： multipart/form-data
+
+参数:
+
+名称 |类型| 是否必须 |描述
+-|-|-
+file |	File |	是	 |文档文件
+title	 |String |	是	 |合同文档名称
+响应:
+
+名称 |类型 |描述
+-|-|-
+code |Int| 响应码
+message| String| 响应消息
+documentId| String| 合同文档ID
+响应码解释:
+
+响应码| 描述
+-|-
+0 |请求成功
+1000000 |未知错误
+1000001 |参数错误
+请求示例：
+
+```HTTP
+
+POST /document/createbyfile HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Content-Type: multipart/form-data; boundary=----
+Content-Disposition: form-data; name="file"; filename="/D:/授权.pdf
+
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+测试文档
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+```
+响应示例：
+```javascript
+{
+  "code": 0,
+  "documentId": "2407437103157690373",
+  "message": "SUCCESS"
+}
+```
+
 
 ### 1.1.2 添加合同文件
 
@@ -303,6 +553,10 @@ Content-Type： multipart/form-data
 | title | String | 是 | 合同文档名称 |
 | contractId | Long | 合同ID和bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID和bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
 
 响应:
 
@@ -342,7 +596,10 @@ Content-Disposition: form-data; name="contractId"
 
 2572980225330036970
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
 
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -374,6 +631,10 @@ Content-Type： multipart/form-data
 | title | String | 否 | 合同文档名称，不传默认使用模板名称 |
 | contractId | Long | 合同ID 或 bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| waterMarks | String | 否 | 水印，json格式字符串；如：[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}] |
+
+当要添加水印时，注意事项如下：
+>添加水印具体参数（文档ID不用添加）请见本文档 1.1.3.2 添加水印
 
 当使用HTML模板时，参数params注意事项如下：
 >参数类型是单行文本时，value大小不超过300,如：{"单行文本":"value1"};<br>
@@ -381,7 +642,7 @@ Content-Type： multipart/form-data
 >参数类型是身份证号，value只能是15或18位的数字或字母，如：{"身份证":"123456789123456789；"};<br>
 >参数类型是单选，value只能是单选的选项,如：{"单选":"val1"};<br>
 >参数类型是多选，value只能是多选的选项，多个value用逗号隔开，如：{"多选":"val1,val2"};<br>
->参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式按照模板上表格填参，如：{"表格":"[["1","11","2","22"],["3","33","4","44"]]"}。
+>参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式是一维数组，数组的每项对应表格的每行，每行格式是key-value格式，key是表格每列的列名如：[{\"key1\":\"1\",\"key2\":\"2\",\"key3\":\"3\",\"key4\":\"4\"},{\"key1\":\"5\",\"key2\":\"6\",\"key3\":\"7\",\"key4\":\"8\"}]。
 
 响应:
 
@@ -410,8 +671,82 @@ x-qys-timestamp: 0
 Cache-Control: no-cache
 Content-Type: multipart/form-data
 
+------WebKitFormBoundary7MA4YWxkTrZu0gW--,
+Content-Disposition: form-data; name="templateId"
+
 contractId=24549626498099077&templateId=2454962649809907788&params=%7B%22paramer1%22%3A%22value1%22%2C%22paramer2%22%3A%22value2%22%7D&title=模板文档
 
+```
+
+响应示例：
+
+```javascript
+{
+  "code": 0,
+  "documentId": "2407437103157690373",
+  "message": "SUCCESS"
+}
+```
+
+####1.1.2.3 用文件添加发起方可见附件文档
+描述：为已生成的草稿状态的合同添加发起方可见的文档，该文档作为内部附件使用，只供发起方内部查看、盖章时的参考文件。支持的文件类型包括：doc, docx, txt, pdf, png, gif, jpg, jpeg, tiff, html。，返回文档ID（文档ID在后续接口会用到）。
+
+Request URL： privapp.qiyuesuo.me/document/addsponsorfile
+
+Request Method： POST
+
+Content-Type： multipart/form-data
+
+参数:
+
+名称| 类型 |是否必须 |	描述
+-|-|-|-
+file |File| 是 |支持PDF文件 和Word文件，txt文件和单张图片格式（png, gif, jpg, jpeg, tiff）
+title |String| 是 |合同文档名称
+contractId| Long| 合同ID和bizId必须填写一个| 合同ID
+bizId |String| 合同ID和bizId必须填写一个| 合同的唯一标识，由调用方生成
+响应:
+
+名称| 类型| 描述
+-|-|-
+code |Int| 响应码
+message| String| 响应消息
+documentId |String| 合同文档ID
+响应码解释:
+
+响应码 |描述
+-|-
+0 |请求成功
+1000000| 未知错误
+1000001 |参数错误
+请求示例：
+
+```HTTP
+
+POST /document/addbyfile HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Cache-Control: no-cache
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="files"; filename="/C:/Desktop/Test/222.pdf
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+
+2597003797105070598
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="contractId"
+
+2603918635415224392
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="waterMarks"
+
+[{"content":"水印1","fontSize":"30","location":"UPPER_LEFT","imageBase64":"/9j/4AAQSkZJRgABAQEASABIAAD/4gxY"},{"content":"水印2","fontSize":"30","location":"LOWER_LEFT"}]
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -500,9 +835,9 @@ Content-Disposition: form-data; name="documentId"
   "message": "SUCCESS"
 }
 ```
-#### 1.1.3.2 添加文字水印
+#### 1.1.3.2 添加水印
 
-描述：根据用户传入的文字，向已经创建好的文档中添加文字水印，默认水印位置居中。
+描述：根据用户传入的水印，向已经创建好的文档中添加水印，默认水印位置居中。
 
 Request URL： /document/addwatermark
 
@@ -515,10 +850,15 @@ Content-Type： application/json
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
 | documentId | Long | 是 | 合同ID |
-| content | String | 是 | 水印内容  |
-| fontSize | int | 是 | 字体大小 |
-| color | String | 是 | 字体颜色 |
-| rotateAngle | Double | 是 | 旋转角度 |
+| type | String | 否 | 水印类型:IMAGE(图片)，QRCODE（二维码），TEXT(文字)默认文字水印 |
+| content | String | 否 | 文字水印  |
+| imageBase64 | String | 否 | 水印图片（Base64格式） |
+| fontSize | int | 否 | 字体大小 |
+| color | String | 否 | 字体颜色（16进制颜色值,需携带#） |
+| rotateAngle | Double | 否 | 旋转角度 |
+| transparency | Double | 否 | 透明度 |
+| scaling | Double | 否 | 图片缩放比例 |
+| location | String | 否 | 水印位置：UPPER_LEFT（左上角），UPPER_RIGHT（右上角），LOWER_LEFT（左下角），LOWER_RIGHT（右下角），MIDDLE_CENTER（居中），TILE（平铺），FILL（填充）|
 
 响应:
 
@@ -548,11 +888,11 @@ x-qys-timestamp: 0
 x-qys-signature: e19dd29e1286024b2cbc98f743c432d6
 
 {
-	"documentId":2510792969443381249,
-	"contact":"水印",
-	"fontSize":15,
-	"color":"#000000",
-	"rotateAngle":0
+  "documentId":2621273342019834156,
+  "type": "IMAGE",
+  "imageBase64": "iVBORw0KGgoAAAANSU",
+  "location": "LOWER_LEFT",
+  "scaling" : 2.0
 }
 ```
 
@@ -586,6 +926,7 @@ Content-Type： application/json
 | subject | String | 是 | 合同名称 |
 | ordinal | Boolean | 否 | 是否顺序签署，默认为false |
 | sn | String | 否 | 合同编号（对接方系统中的业务编号） |
+| description | String | 否 | 合同描述 |
 | categoryId | String | 否 | 业务分类ID |
 | categoryName | String | 否 | 业务分类名称，如果分类ID为空，则用此参数确定业务分类 |
 | send | Boolean | 否 | 是否发起合同，默认true。（true：立即发起；false：保存为草稿） |
@@ -613,18 +954,20 @@ Signatory（签署方）:
 | actions | Array[Action] | 否 | 签署动作 |
 | categoryId | String | 否 | 业务分类ID，接收方是内部企业时，可指定业务分类 |
 | categoryName | String | 否 | 业务分类名称，接收方是内部企业时，可指定业务分类 |
+| faceAuthWay | String | 否 | 人脸识别签署失败后的降级认证，DEFAULT（不允许），IVS（手机三要素），BANK（银行卡四要素） |
 
 Action（签署动作）：
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字） |
+| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字），AUDIT（审批） |
 | name | String | 是 | 签署动作名称 |
 | serialNo | Integer | 否 | 签署顺序（从1开始），若有多个签署动作，此字段必填 |
 | sealId | String | 否 | 印章ID，指定企业签章所用印章 |
 | sealIds | String | 否 | 指定印章，格式：[123123123213,123213213213]，预签署页面指定签署位置时，限制使用的印章 |
 | actionOperators | Array[ActionOperator] | 否 | 签署人（法定代表人签字无需填写该项） |
 | locations | Array[SignatoryRect] | 否 | 签署位置 |
+| autoSign | Boolean | 否 | 自动签署 |
 
 ActionOperator（签署人）：
 
@@ -741,11 +1084,13 @@ Content-Type： application/json
 | -------- | -------- | -------- | -------- |
 | subject | String | 是 | 合同名称 |
 | sn | String | 否 | 合同编号，对接方系统中的业务编号 |
+| description | String | 否 | 合同描述 |
 | categoryId | String | 否 | 业务分类ID |
 | categoryName | String | 否 | 业务分类名称，如果分类ID为空，则用此参数确定业务分类 |
 | send | Boolean | 否 | 是否发起合同，默认true。（true：立即发起；false：保存为草稿） |
 | documents | Array[Long] | 否 | 合同文档ID的集合（一个文档只能属于一个合同） |
 | expireTime | String | 否 | 合同过期时间；格式：yyyy-MM-dd HH:mm:ss，过期未结束签署，则作废，不传该参数则默认使用控制台配置的过期时间。 |
+| endTime | String | 否 | 合同终止时间；格式：yyyy-MM-dd ，系统将时间调至传入时间的23时59分59秒。 |
 | creatorName | String | 否 | 合同创建人姓名 |
 | creatorContact | String | 否 | 合同创建人手机号码 |
 | tenantName | String | 否 | 发起方名称 |
@@ -753,8 +1098,12 @@ Content-Type： application/json
 | documentParams | Array[DocumentParam] | 否 | 模板参数 |
 | businessData | String | 否 | 用户的业务数据|
 | bizId | String | 否 | 合同的唯一标识，由调用方生成 |
+| waterMarkConfigs | Array[WaterMarkContent] | 否 | 水印配置，参考WaterMarkContent |
+| extraSign | Boolean | 否 | 指定位置外签署，默认为false |
+| mustSign | Boolean | 否 | 允许指定位置签署，默认为true，指定位置外签署和指定位置签署两者不可同时为false |
 
-注意：
+**注意**：
+
 >**合同文档：**如果业务分类允许用户上传文档，则用户传入的 documents 与业务分类中配置的文档都作为合同文档；如果业务分类不允许用户上传文档，只能使用业务分类中配置的文档，如果用户传入 documents则提示错误。<br>
 >**参数send：**是否发起合同；如果发起，必须传入发起方的模板参数值（用documentParams来设置）；如果不发起，可以在创建合同后调用“预签署页面”接口，在预签署页面填写参数。<br>
 >
@@ -765,6 +1114,8 @@ Content-Type： application/json
 >(1) 配置中“预设”签署方：参数中的签署方与业务分类中配置的签署方必须匹配（数量、顺序、类型均匹配），此时签署动作以业务分类中配置的为准，参数中无须传签署动作；
 >
 >(2) 配置中“默认”签署方：以参数中传入的签署方为准，如果发起方未传审批流（即签署动作），则发起方使用业务分类中配置的审批流；
+>
+>**指定签署位置：**支持配置的三种方式：“必须签署可增加”（mustSign:true；extraSign:true）、“必须签署不可增加”（mustSign:true；extraSign:false）、“非必须签署”（mustSign:false；extraSign:true）。默认是必须签署不可增加。
 
 Signatory（签署方）:
 
@@ -779,6 +1130,8 @@ Signatory（签署方）:
 | actions | Array[Action] | 否 | 签署动作,业务分类非预设且签署方为发起方时，使用用户传入的签署动作，其余情况使用业务分类的配置 |
 | categoryId | String | 否 | 业务分类ID，接收方是内部企业时，可指定业务分类 |
 | categoryName | String | 否 | 业务分类名称，接收方是内部企业时，可指定业务分类 |
+| remind | Boolean | 否 | 是否发送消息提醒，默认为true |
+| cardNo | String | 否 | 身份证号，用于指定个人用户认证时的身份证号 |
 
 人脸识别签署注意：
 >业务分类中未预设签署方，是否人脸识别签署由调用方指定；业务分类中预设了个人签署方，是否需要人脸识别签署根据业务分类的配置确定<br>
@@ -796,17 +1149,18 @@ DocumentParam（模板参数）：
 > 参数类型是身份证号，value只能是15或18位的数字或字母，如：123456789123456789;<br>
 > 参数类型是单选，value只能是单选的选项,如：val1;<br>
 > 参数类型是多选，value只能是多选的选项，多个value用逗号隔开，如：val1,val2;<br>
-> 参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式按照模板上表格填参，如：{"表格":"[["1","11","2","22"],["3","33","4","44"]]"}。
+> 参数类型是表格，可以动态添加行，暂不支持动态添加列，value格式是一维数组，数组的每项对应表格的每行，每行格式是key-value格式，key是表格每列的列名如：[{\"key1\":\"1\",\"key2\":\"2\",\"key3\":\"3\",\"key4\":\"4\"},{\"key1\":\"5\",\"key2\":\"6\",\"key3\":\"7\",\"key4\":\"8\"}]。
 
 Action（签署动作）：
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字） |
+| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字），AUDIT（审批） |
 | name | String | 是 | 签署动作名称 |
 | serialNo | Integer | 是 | 签署顺序（从1开始） |
 | sealId | String | 否 | 印章ID，指定企业签章所用印章 |
 | sealIds | String | 否 | 指定印章，格式：[123123123213,123213213213] |
+| autoSign | Boolean | 否 | 是否自动签署 |
 | actionOperators | Array[ActionOperator] | 否 | 签署人（法定代表人签字无需填写该项） |
 | locations | Array[SignatoryRect] | 否 | 签署位置 |
 
@@ -828,6 +1182,14 @@ SignatoryRect（签署位置）：
 | keywordIndex | Integer | 否 | 第几个关键字,0:全部,-1:最后一个,其他:第keyIndex个,默认为1 |
 | offsetX | Double | 否  按坐标时：必传 按关键字时：选传 | X轴坐标，坐标定位时必传，关键字定位时选传 |
 | offsetY | Double | 否  按坐标时：必传 按关键字时：选传 | Y轴坐标，坐标定位时必传，关键字定位时选传 |
+
+WaterMarkContent（水印配置）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| type | String | 是 | 水印类型：TEXT(文本),IMAGE(图片) |
+| content | String | 水印类型为文本时必填 | 文字内容 |
+| imageBytes | byte[] | 水印类型为图片时必填 | 图片水印。只支持png格式 |
 
 响应:
 
@@ -869,6 +1231,8 @@ Cache-Control: no-cache
     ],
     "creatorName": "阿达",
     "creatorContact": "18000000000",
+    "extraSign": false,
+    "mustSign": true,
     "signatories": [
         {
             "tenantType": "CORPORATE",
@@ -933,7 +1297,7 @@ Cache-Control: no-cache
 
 描述：编辑草稿状态的合同，保留旧的模版参数
 
-Request URL： /createRetainParams
+Request URL： /contract/createRetainParams
 
 Request Method： POST
 
@@ -973,7 +1337,7 @@ Action（签署动作）：
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字） |
+| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字），AUDIT（审批） |
 | name | String | 是 | 签署动作名称（此参数与签署位置SignatoryRect.actionName对应,不重复就行） |
 | serialNo | Integer | 否 | 签署顺序（从1开始） |
 | actionOperators | Array[ActionOperator] | 否 | 签署人（法定代表人签字无需填写该项） |
@@ -1059,7 +1423,7 @@ Request Method：GET
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| contractId | String | 合同ID和bizId必须填写一个 | 合同ID |
+| contractId | Long | 合同ID和bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID和bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
 | operable | Boolean | 否 | 是否可操作（发起、填参等），默认为true |
 | panel | String | 否 | 模块，包括CONTRACT（全文），POINT（要点），PARAMS（参数对比） |
@@ -1116,7 +1480,7 @@ Content-Type: application/json
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
+| contractId | Long | 合同ID 或 bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
 
 返回值：
@@ -1157,6 +1521,136 @@ Content-Type: application/json
 {
     "code": 0,
     "message": "SUCCESS"
+}
+```
+#### 1.1.4.6 草稿合同填参
+
+描述：调用此接口用于填写草稿状态的合同参数，同时保留旧的参数。<br>
+
+Request URL：/contract/fillparams
+
+Request Method：POST
+
+Content-Type: application/json
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
+| bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| documentParams | List&lt;FillDocumentParam&gt; | 否 | 合同文档参数 |
+FillDocumentParam
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| name | String | 是 | 参数名称 |
+| value | String | 是 | 参数值|
+
+返回值：
+
+| 名称 | 类型 | 响应 |
+| -------- | -------- | -------- |
+| code | Int | 错误码，0为成功 |
+| message | String | 错误信息 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+POST /contract/fillparams HTTP/1.1
+Host: hostname
+x-qys-timestamp: 0
+x-qys-signature: c41e16fa3fe3eeb65ed5f1fa3db49
+x-qys-accesstoken: 17RKme43Mc
+Content-Type: application/json
+
+{
+	"contractId": 2611141940251005036,
+	"documentParams": [
+		{
+			"name": "乙方姓名2",
+			"value": "邓茜茜"
+		},
+		{
+			"name": "乙方姓名3",
+			"value": "邓茜"
+		}
+		]
+}
+```
+
+响应示例:
+
+```javascript
+{
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
+### 1.1.5 删除合同文件
+
+#### 1.1.5.1 解绑文件
+描述：调用此接口可以解绑合同文档。合同必须是未签署状态（草稿、签署中或拟定中状态），非草稿状态合同至少保留一个文件。
+
+Request URL： /document/unbind
+
+Request Method： POST
+
+Content-Type： application/json
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
+| bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| documentIds | Long[] | 是 | 文档ID数组 |
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+POST  /document/unbind HTTP/1.1
+Host:hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Content-Type: application/json
+Cache-Control: no-cache
+
+{
+    "contractId": 2609399471916188092,
+    "documentIds": [2609399451108245936,2611857982808252441]
+}
+```
+
+响应示例：
+
+```javascript
+{
+  "code": 0,
+  "message": "SUCCESS"
 }
 ```
 
@@ -1282,6 +1776,7 @@ Content-Type： application/json
 | tenantName | String | 是 | 公司名称 |
 | stampers | Array[Stamper] | 否 | 签署位置，为空时签署不可见签名，参考【Stamper】 |
 | noSignAllKeyword | Boolean | 否 | 不签署所有关键字位置，默认为true，即只签署第1个关键字 |
+| useDefaultSeal | Boolean | 否 | 是否使用默认印章签署，默认true（仅在已设置签署位置未设置印章的情况下生效） |
 
 Stamper
 
@@ -1779,9 +2274,10 @@ Content-Type: application/json
 | expireTime | Integer | 否 | 链接过期时间，取值范围：5分钟 - 3天，默认30分钟，单位（秒） |
 | cardNo | String | 否 | 证件号码：个人/公司证件号 |
 | canLpSign | String | 否 | 是否可以同时签署法人章：1（是）;0（否），默认否 |
-| locations | Array[SignatoryRect] | 否 | 签署位置，会覆盖已有的签署位置 |
+| actions | Array[Action] | 否 | 签署动作,添加发起方时签署动作必填 |
 | callbackParam | String | 否 | 回调参数，用户签署完成后或退回合同，将该参数通过回调函数返回（旧参数，建议使用业务分类中配置的回调） |
 | callbackHeader | String | 否 | 回调Header参数，Json格式（旧参数，建议使用业务分类中配置的回调） |
+| callbackPage | String | 否 | 回调页面 |
 
 > **contact参数说明：**
 >
@@ -1789,16 +2285,36 @@ Content-Type: application/json
 >
 > 2、签署方类型是“公司”时，如果contact为空，则页面默认是公司的登录态；如果contact不为空，则页面默认为个人登录态。
 
-SignatoryRect（签署位置）
+Action（签署动作）：
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| documentId | Long | 是 | 合同文档Id |
-| rectType | String | 是 | 签章类型； SEAL_PERSONAL（个人签名）, SEAL_CORPORATE（公司公章）, TIMESTAMP（时间戳）, ACROSS_PAGE（骑缝章） |
-| page | Integer | 否 | 签署页码，从1开始，坐标定位时必传 |
-| keyword | String | 否 | 关键字，关键字定位时必传 |
-| offsetX | Double | 否 | 横坐标，坐标定位时必传，关键字定位时选传 |
-| offsetY | Double | 否 | 纵坐标，坐标定位时必传，关键字定位时选传 |
+| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字），AUDIT（审批） |
+| name | String | 是 | 签署动作名称 |
+| serialNo | Integer | 是 | 签署顺序（从1开始） |
+| sealId | String | 否 | 印章ID，指定企业签章所用印章 |
+| sealIds | String | 否 | 指定印章，格式：[123123123213,123213213213] |
+| locations | Array[SignatoryRect] | 否 | 签署位置 |
+| actionOperators | Array[ActionOperator] | 否 | 签署动作操作人 |
+
+SignatoryRect（签署位置）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| documentId | Long | 是 | 合同文档ID |
+| rectType | String | 是 | 签章类型： SEAL_PERSONAL（个人签名）, SEAL_CORPORATE（公司公章） |
+| page | Integer | 否  按坐标指定位置时：必传| 签署页码，坐标指定位置时必须 |
+| keyword | String | 否  按关键字指定位置时：必传 | 关键字，关键字指定位置时必须 |
+| keywordIndex | Integer | 否 | 第几个关键字,0:全部,-1:最后一个,其他:第keyIndex个,默认为1 |
+| offsetX | Double | 否  按坐标时：必传 按关键字时：选传 | X轴坐标，坐标定位时必传，关键字定位时选传 |
+| offsetY | Double | 否  按坐标时：必传 按关键字时：选传 | Y轴坐标，坐标定位时必传，关键字定位时选传 |
+
+ActionOperator（签署动作操作人）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| operatorName | String | 否 | 签署人姓名 |
+| operatorContact | String | 是 | 签署人联系方式 |
 
 返回值：
 
@@ -1835,6 +2351,7 @@ Content-Type: application/json
 	"contact":"15000000000",
   	"callbackParam": "1231342423435354",
   	"callbackHeader": "{\"param1\":\"val1\"}",
+  	"callbackPage": "https://www.baidu.com/",
   	"locations": [
         {
           "documentId": 2494810528664281090,
@@ -1881,7 +2398,7 @@ Content-Type: application/json
 | -------- | -------- | -------- | -------- |
 | contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
-| tenantId | Long | 否 | 签署方ID（公司ID/个人ID），和tenantName不能同时为空 |
+| tenantId | String | 否 | 签署方ID（公司ID/个人ID），和tenantName不能同时为空 |
 | tenantName | String | 否 | 签署方名称，和tenantId不能同时为空 |
 | tenantType | String | 是 | 签署方类型：CORPORATE（平台企业）,INNER_COMPANY（内部企业）,COMPANY（外部企业）,PERSONAL（个人）; |
 | receiverName | String | 否 | 接收人名称 |
@@ -1889,7 +2406,20 @@ Content-Type: application/json
 | cardNo | String | 否 | 证件号码：个人/公司证件号 |
 | callbackParam | String | 否 | 回调参数，用户签署完成后或退回合同，将该参数通过回调函数返回（旧参数，建议使用业务分类中配置的回调） |
 | callbackHeader | String | 否 | 回调Header参数，Json格式（旧参数，建议使用业务分类中配置的回调） |
+| actions | Array[Action] | 否 | 签署动作,添加发起方时签署动作必填 |
 | locations | Array[SignatoryRect] | 否 | 签署位置，会覆盖已有的签署位置 |
+
+Action（签署动作）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| type | String | 是 | 签署动作类型：CORPORATE（企业签章），PERSONAL（个人签字），LP（法定代表人签字），AUDIT（审批） |
+| name | String | 是 | 签署动作名称 |
+| serialNo | Integer | 是 | 签署顺序（从1开始） |
+| sealId | String | 否 | 印章ID，指定企业签章所用印章 |
+| sealIds | String | 否 | 指定印章，格式：[123123123213,123213213213] |
+| locations | Array[SignatoryRect] | 否 | 签署位置 |
+| actionOperators | Array[ActionOperator] | 否 | 签署动作操作人 |
 
 签署位置（SignatoryRect）
 
@@ -1901,6 +2431,13 @@ Content-Type: application/json
 | keyword | String | 否 | 关键字，关键字定位时必传 |
 | offsetX | Double | 否 | 横坐标，坐标定位时必传，关键字定位时选传 |
 | offsetY | Double | 否 | 纵坐标，坐标定位时必传，关键字定位时选传 |
+
+ActionOperator（签署动作操作人）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| operatorName | String | 否 | 签署人姓名 |
+| operatorContact | String | 是 | 签署人联系方式 |
 
 返回值：
 
@@ -2595,6 +3132,68 @@ Content-Disposition: form-data; name="contractId"
 }
 ```
 
+### 1.3.6 设置合同终止时间
+
+描述：设置合同终止时间，只能对已完成或强制结束的合同操作.终止时间必须在今天之后。
+
+Request URL： /contract/endtime
+
+Request Method： POST
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| contractId | Long | 合同ID与业务ID不能都为空 | 合同Id |
+| bizId | String | 合同ID与业务ID不能都为空 | 业务ID |
+| endtime | String | 是 | 合同终止时间，格式：yyyy-MM-dd |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+
+请求示例：
+
+```HTTP
+
+POST /contract/endtime HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 7fES1m3Unv
+x-qys-timestamp: 0
+x-qys-signature: a91c189cf9
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="contractId"
+
+2604627233064177829
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="endTime"
+
+2019-08-30
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+```
+
+响应示例：
+
+```javascript
+{
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
 ## 1.4 查看、下载合同
 
 ### 1.4.1 查看合同
@@ -3153,6 +3752,294 @@ x-qys-signature: a91c189cf9469a4baac0c91547205b93
 }
 ```
 
+#### 1.4.1.5 查询合同操作日志
+
+描述：根据合同ID获取合同相关的操作日志
+
+Request URL： /contract/operationlog
+
+Request Method： GET
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| operation | String | 否 | 操作类型：DOWNLOADCONTRACT（文件下载）、PRINTCONTRACT（文件打印），默认查询下载和打印操作类型 |
+| contractId | Long | 是 | 合同Id |
+| operatorContact | String | 否 | 操作人联系方式 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result| List[SystemAuditLog] | 操作日志信息|
+
+SystemAuditLog
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| entityId | Long | 操作对象的id |
+| entityName | String | 主题 |
+| operatorId | Long | 操作人Id |
+| operator | String | 操作人 |
+| mobile | String | 操作人手机号 |
+| number | String | 操作人员工编号 |
+| email | String | 操作人邮箱 |
+| departments | List[Department] |  操作人所属部门 |
+| detailedOperation | String | 详细操作 |
+| createTime | Date | 操作时间 |
+
+Department：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 部门ID |
+| companyName | String | 组织架构名称 |
+| type | String | 类型：CORPORATE(总公司),CHILD(子公司),COMPANY(外部企业),SECTION(部门) |
+
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+
+请求示例：
+
+```HTTP
+
+GET /contract/operationlog?operation=DOWNLOADCONTRACT&amp; contractId=2599501922709893626 HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 7fES1m3Unv
+x-qys-timestamp: 0
+x-qys-signature: a91c189cf9
+
+```
+
+响应示例：
+
+```javascript
+{
+    "result": [
+        {
+            "id": "2599505559033049496",
+            "entityId": "2599501922709893626",
+            "operator": "张三",
+            "operatorId": "2570809757352608417",
+            "operation": "DOWNLOADCONTRACT",
+            "createTime": "2019-08-15 14:27:01",
+            "entityName": "普自项目一期A5地块场地平整工程合同模板(1).doc",
+            "detailedOperation": "下载了文件：《测试文档.doc》",
+            "companyId": "2578530725139492930",
+            "mobile": "1500000000000",
+            "departments": [
+                {
+                    "id": "2599504874920120482",
+                    "companyName": "产品组",
+                    "type": "SECTION"
+                },
+                {
+                    "id": "2599504876165828785",
+                    "companyName": "产品组",
+                    "type": "SECTION"
+                }
+            ],
+            "number": "789456123",
+            "operationDesc": "文件下载"
+        }
+    ],
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
+#### 1.4.1.6 查询合同填参情况
+描述: 获取合同参数情况，返回参数“是否填参完成” 和 所有模板填参数据。
+
+Request URL：/contract/documentparams
+
+Request Method：GET
+
+参数：
+
+| 名称 | 类型 | 是否必须 | 说明 |
+| -------- | -------- | -------- | -------- |
+| contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
+| bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| documents | List&lt;Document&gt; | 文档参数集合 |
+| sponsorComplete | Boolean | 发起方是否填参完成 |
+
+Document：
+
+| 名称 | 类型 | 说明 |
+| -------- | -------- | -------- |
+| id | Long | 合同文档ID |
+| title | String | 文档名称 |
+| params | Array[DocumentParam] | 合同文档模板参数,参考DocumentParam |
+
+DocumentParam :
+
+| 名称 | 类型 | 说明 |
+| -------- | -------- | -------- |
+| name | String | 文档参数名称 |
+| value | Stirng | 文档参数值 |
+| required | Boolean | 是否必填 |
+| type | ParamType | text(文本),email(邮件),money(小数),mobile(手机),integer(整数) |
+| readOnly | Boolean | 是否只读 |
+| belongToSponsor | Boolean | 是否是发起方填写 |
+| paramKey | String | 模板参数key |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+GET /contract/documentparams?contractId=2596202673608380445 HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+
+```
+
+响应示例：
+
+```HTTP
+{
+    "code": 0,
+    "documents": [
+        {
+            "id": "2596202625436798982",
+            "title": "劳动合同_带参数",
+            "params": [
+                {
+                    "id": "2596202625814286343",
+                    "name": "乙方姓名",
+                    "value": "12",
+                    "type": "text",
+                    "required": true,
+                    "readOnly": false,
+                    "paramKey": "key2",
+                    "componentValue": "12",
+                    "componentType": "text"
+                },
+                {
+                    "id": "2596202626518929416",
+                    "name": "身份证号",
+                    "value": "12",
+                    "type": "text",
+                    "required": true,
+                    "readOnly": false,
+                    "componentValue": "12",
+                    "componentType": "text"
+                }
+            ]
+        }
+    ],
+    "sponsorComplete": true,
+    "message": "SUCCESS"
+}
+```
+
+#### 1.4.1.7 查询用户对合同的操作权限
+
+描述：根据合同ID及用户联系方式查询操作权限。
+
+Request URL： /contract/permission
+
+Request Method： GET
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| contractId | Long | 合同ID与业务ID不能都为空 | 合同Id |
+| bizId | String | 合同ID与业务ID不能都为空 | 业务ID |
+| contractId | String | 是 | 用户联系方式 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result| ContractPermission | 合同权限信息|
+
+ContractPermission：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| viewPermission | Boolean | 查看权限 |
+| downloadPermission | Boolean | 下载权限 |
+| printPermission | Boolean | 打印权限 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+
+请求示例：
+
+```HTTP
+
+GET /contract/permission HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 7fES1m3Unv
+x-qys-timestamp: 0
+x-qys-signature: a91c189cf9
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="contractId"
+
+2603409159703212163
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="bizId"
+
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="contact"
+
+18435186216
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+```
+
+响应示例：
+
+```javascript
+{
+    "result": {
+        "viewPermission": false,
+        "downloadPermission": true,
+        "printPermission": false
+    },
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
 ### 1.4.2 下载合同
 
 #### 1.4.2.1 下载合同
@@ -3299,11 +4186,13 @@ Content-Disposition →attachment;fileName=2252412945004756992.zip
 
 ### 1.5.1 防伪打印页面
 
-描述: 获取防伪打印的页面链接，打开链接可进行防伪打印。链接有效期为30分钟。
+描述: 获取防伪打印的页面链接（传入文档ID可以指定文档打印），打开链接可进行防伪打印。链接有效期为30分钟。
 
 Request URL：/contract/efprinturl
 
 Request Method：GET
+
+Content-Type: multipart/form-data
 
 参数：
 
@@ -3311,6 +4200,7 @@ Request Method：GET
 | -------- | -------- | -------- | -------- |
 | contractId | String | 合同ID 或 bizId必须填写一个 | 合同ID |
 | bizId | String | 合同ID 或 bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| documentIds | Long[] | 否 | 文档ID数组 |
 
 响应:
 
@@ -3333,7 +4223,7 @@ Request Method：GET
 
 ```HTTP
 
-GET /contract/efprinturl?contractId=2407446180688510983 HTTP/1.1
+GET /contract/efprinturl?contractId=2407446180688510983&documentIds=2604894332795838519 HTTP/1.1
 Host: hostname
 x-qys-accesstoken: cwdYln1l6e
 x-qys-signature: b267a7887b08af7230bab8c956a1f07e
@@ -3574,6 +4464,75 @@ x-qys-timestamp: 0
 {
   "code": 0,
   "printCount": 10,
+  "message": "SUCCESS"
+}
+```
+
+# 1.6 合同抄送
+
+## 1.6.1添加抄送人
+
+描述：为合同添加抄送人信息。
+
+Request URL： /contract/transmit
+
+Request Method： POST
+
+Content-Type: application/json
+
+参数:
+
+| 名称         | 类型                       | 是否必须                  | 说明                         |
+| ------------ | -------------------------- | ------------------------- | ---------------------------- |
+| contractId   | Long | 合同ID和bizId必须填写一个 | 合同ID                       |
+| bizId | String | 合同ID和bizId必须填写一个 | 合同的唯一标识，由调用方生成 |
+| transmitters | List&lt;ContractTransmitItem&gt; | 是                        | 抄送人信息                   |
+
+ContractTransmitBean(抄送人信息)
+
+| 名称           | 类型   | 是否必须 | 说明         |
+| -------------- | ------ | -------- | ------------ |
+| receiverMobile | String | 是       | 抄送人手机号 |
+| receiverName   | String | 是       | 抄送人姓名   |
+
+返回值：
+
+| 名称    | 类型   | 说明            |
+| ------- | ------ | --------------- |
+| code    | Int    | 错误码，0为成功 |
+| message | String | 错误信息        |
+
+
+
+请求示例：
+
+```java
+POST  /contract/transmit HTTP/1.1
+Host: hostname
+x-qys-accesstoken: F9q0WaZj8D
+x-qys-timestamp: 0
+x-qys-signature: 0d6f366839790ad2483cf297d8768928
+Content-Type: application/json
+
+{
+ "contractId":"2602036082319806474",
+ "transmitters":[
+  	{
+  		"receiverMobile":"15021504325",
+		"receiverName":"邓茜茜"
+  	},
+  	{
+  		"receiverMobile":"17621157872"
+  	}
+  	]
+}
+```
+
+响应示例：
+
+```java
+{
+  "code": 0,
   "message": "SUCCESS"
 }
 ```
@@ -3958,6 +4917,173 @@ x-qys-signature: 426cfc4999d6d8393a0a7b83f135462e
     "message": "SUCCESS"
 }
 ```
+## 2.4 查询所有内部企业模板分组
+
+描述：查询所有内部企业下文件模板的分组，模板只查询已启用的，返回的分组结构与契约锁系统中的分组结构一致。
+
+Request URL：/template/templategroup/list
+
+Request Method： GET
+
+参数:无
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result  | Array[Company] | 公司列表 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+Company(公司信息)：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司ID |
+| name | String | 公司名称 |
+| charger | String | 管理员名称 |
+| templateGroup | TemplateGroup | 模板分组，参考TemplateGroup |
+
+TemplateGroup（分组信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 模板的分组ID |
+| name | String | 模板的分组名称 |
+| creator | String | 创建人名称 |
+| companyId | Long | 所属公司ID |
+| levels | Int | 该分组所在的分组层级，0为根节点 |
+| parentId | Long | 父分组的ID |
+| createTime | String | 分组的创建时间，格式yyyy-MM-dd HH:mm:ss |
+| children | Array[TemplateGroup] | 该分组下的子分组列表 |
+| templateList | Array[Template] | 该分组下的模板信息 |
+
+Template（模板信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | String | 模板ID |
+| pdfKey | String | 转换为PDF后的文件 |
+| fileKey | String | 模版原文件 |
+| status | Integer | 模版状态   1：启用，0：停用 |
+| tags  | Array[Tag] | 标签信息；参照Tag |
+| templateType | String | 模板类型：HTML(html文本),	HTML_FORM(html参数模板),	WORD(word文本),	WORD_FORM(word参数模板) |
+| tenantId | Long | 所属公司ID |
+| title | String | 模版名称 |
+| type  | String | 模版原文件类型 |
+| createTime | Date | 创建时间 |
+| updateTime | Date | 更新时间 |
+| word  | boolean | 是否为word模板|
+| form  | boolean | 是否为参数模板|
+
+Tag:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 标签ID |
+| name | String | 标签名 |
+| templateId | Long | 模板ID |
+| tenantId  | Long | 用户ID |
+| updateTime | Date | 操作时间 |
+
+请求示例：
+
+```HTTP
+
+GET /template/innercompany/templategroup HTTP/1.1
+Host: [host]
+x-qys-accesstoken: seUTZBNQua
+x-qys-timestamp: 0
+x-qys-signature: 426cfc4999d
+
+```
+
+响应示例：
+
+```javascript
+{
+	"result": [{
+		"id": "2593709441139560456",
+		"name": "娃哈哈娃哈哈",
+		"status": "CERTIFYING",
+		"province": "上海",
+		"label": "",
+		"templateGroup": {
+			"id": "2571937718710128650",
+			"name": "花里家",
+			"creator": "张一",
+			"companyId": "2571937718710128650",
+			"leftValue": 0,
+			"rightValue": 3,
+			"levels": 0,
+			"createTime": "2019-06-05 11:46:54",
+			"updateTime": "2019-06-05 11:46:54",
+			"templateType": "FOLDER",
+			"children": [{
+				"id": "2573735722934808739",
+				"name": "1",
+				"creator": "张一",
+				"companyId": "2571937718710128650",
+				"leftValue": 1,
+				"rightValue": 2,
+				"levels": 1,
+				"createTime": "2019-06-05 11:46:54",
+				"updateTime": "2019-06-05 11:46:54",
+				"templateType": "FOLDER",
+				"parentId": "2571937718710128650",
+				"templateList": [],
+				"children": [{
+					"id": "2570978560281371528",
+					"name": "ccc",
+					"creator": "张三",
+					"companyId": "2570617114465419270",
+					"leftValue": 2,
+					"rightValue": 7,
+					"levels": 2,
+					"createTime": "2019-05-28 21:10:55",
+					"updateTime": "2019-05-28 21:10:55",
+					"templateType": "FOLDER",
+					"children": [],
+					"parentId": "2570978516505420679",
+					"templateList": [{
+						"id": "2571290999393931502",
+						"tenantId": "2570617114465419270",
+						"title": "可变内容测试-张豪",
+						"templateType": "HTML",
+						"fileKey": "20190529-315d2ae4-a778-4d42-abf9-51b70c327b1f",
+						"pdfKey": "20190529-f37de9fa-d230-4454-b6c8-d4e656a805db",
+						"type": "html",
+						"status": 1,
+						"createTime": "2019-05-29 17:52:26",
+						"updateTime": "2019-05-29 19:31:19",
+						"permissionType": "PRIVATE",
+						"groupId": "2570978560281371528",
+						"creator": "张豪",
+						"word": false,
+						"form": false,
+						"entityName": "可变内容测试-张豪",
+						"entityId": "2571290999393931502"
+					}],
+					"child": false
+				}],
+				"child": true
+			}],
+			"child": true
+		}
+	}],
+	"code": 0,
+	"message": "SUCCESS"
+}
+```
+
 
 # 3 企业接口
 
@@ -4016,9 +5142,9 @@ x-qys-timestamp: 0
 }
 ```
 
-### 3.1.2 创建内部企业
+### 3.1.2 创建企业
 
-描述：提交企业认证信息，创建企业，新创建的企业状态 是”审核中“，需要”基本信息审核“和”基本户审核“通过后才能生效。
+描述：提交企业认证信息，创建内部企业或外部企业，新创建的企业状态 是”审核中“，需要”基本信息审核“和”基本户审核“通过后才能生效。
 
 Request URL： /company/create
 
@@ -4032,17 +5158,20 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- | -------- |
 | name | String	| 是 | 企业名称	|
 | license |	File | 是 | 营业执照 |
-| legalAuthorization | File	| 否 | 法人授权书 |
+| legalAuthorization | File	| 创建内部企业时必填 | 法人授权书 |
 | registerNo | String| 是 |	工商注册号、统一社会信用码 |
 | legalPerson |String | 是	| 法人姓名|
 | paperType |String | 否 |	法人证件照类型：IDCARD("二代身份证"), PASSPORT("护照"), OTHER("其他");|
 | legalPersonId | String | 否 |	法人证件号|
 | charger |String| 是 |负责人|
 | mobile |String| 是 |负责人手机号|
-| province |String | 是  |所在区域|
+| area |String| 否 |地区：CN("中国大陆 "),TW("中国台湾"),HK("中国香港"),MO("中国澳门");默认为中国大陆CN|
+| province |String | 否  |所在区域|
 | tenantType | String| 是  |	企业类型：INNER_COMPANY（内部企业），COMPANY（外部企业）|
 | openCompanyId |String| 否 |第三方平台企业的ID，为空则自动生成 |
 | operator |String| 否 | 操作人名称 |
+| companyType |Integer| 否 | 公司类型：1（企业法人） 2（个体工商户）默认为企业 3（政府） 4（事业单位）5（其他组织）默认为企业法人 |
+| remind |Boolean| 否 | 企业创建成功，是否短信通知管理员，默认不通知 |
 
 响应:
 
@@ -4050,7 +5179,20 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- |
 | code | Int | 响应码 |
 | message | String | 响应消息 |
-| result |String| 第三方平台企业的ID，对应参数中的openCompanyId |
+| result |String| 公司信息，参考Company |
+
+Company：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司id |
+| name | String | 公司名称 |
+| registerNo | String | 公司代码 |
+| status | TenantStatus | 公司状态；UNREGISTERED（未注册），REGISTERED（已注册），CERTIFYING（认证中），AUTH_SUCCESS（认证完成），AUTH_FAILURE（认证失败） |
+| tenantType | TenantType | 公司类型；CORPORATE（平台方），INNER_COMPANY（内部公司），COMPANY（外部公司） |
+| legalPerson | String | 法人姓名 |
+| area | String | 地区：CN("中国大陆 "),TW("中国台湾"),HK("中国香港"),MO("中国澳门");默认为中国大陆CN |
+| createTime | Date | 创建时间，格式：yyyy-MM-dd HH:mm:ss |
 
 响应码解释:
 
@@ -4105,7 +5247,10 @@ Content-Disposition: form-data; name="province"
 
 河南
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="companyType"
 
+3
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
 ```
 
 响应示例：
@@ -4234,6 +5379,7 @@ Company：
 | legalPerson | String | 法人姓名 |
 | legalPersonId | String | 法人证件号 |
 | createTime | Date | 创建时间，格式：yyyy-MM-dd HH:mm:ss |
+| freeze | Boolean | 冻结或未冻结状态 |
 
 响应码解释:
 
@@ -4298,6 +5444,8 @@ Content-Type： multipart/form-data
 | registerNo | String |是| 认证企业工商注册号 |
 | charger | String | 是|认证企业负责人 |
 | mobile | String | 是|认证企业负责人手机号，用于接收通知短信 |
+| license | File | 否 |营业执照 |
+| legalPerson | String | 否 |法人姓名 |
 
 响应：
 
@@ -4305,6 +5453,7 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- |
 | code | Int | 响应码 |
 | message | String | 响应消息 |
+| result | Company | 公司信息 |
 
 响应码解释:
 
@@ -4314,6 +5463,10 @@ Content-Type： multipart/form-data
 | 1000000 | 未知错误 |
 | 1000001 | 参数错误 |
 
+Company：
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司ID |
 
 请求示例：
 
@@ -4352,6 +5505,9 @@ Content-Disposition: form-data; name="mobile"
 ```javascript
 
 {
+    "result": {
+        "id": "2596554565124366339"
+    },
     "code": 0,
     "message": "SUCCESS"
 }
@@ -4359,7 +5515,7 @@ Content-Disposition: form-data; name="mobile"
 
 ### 3.1.6 变更企业信息
 
-描述：已认证成功的企业，可以调用此接口对认证信息进行变更，变更之后需要后台审批。
+描述：已认证成功的企业，可以调用此接口获取认证链接，对企业基本认证信息进行变更，基本信息变更通过后会发送短信提醒申请人进行下一步认证。
 
 Request URL： /company/changeinfo
 
@@ -4371,13 +5527,10 @@ Content-Type： multipart/form-data
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| presentCompanyName | String | 是 | 当前公司名 |
-| mobile | String | 是 | 变更人手机号（必须是系统管理员或法人） |
-| companyName | String | 否 | 变更后的公司名 |
-| legalPerson | String | 否 | 变更后的法人名 |
-| registerNo | String  | 否 | 企业代码 |
-| license | File | 是 |　营业执照 |
-| legalAuthorization | File | 修改公司名称时必填 |授权书|
+| companyId | Long | 公司ID、公司名称、企业代码不能同时为空 | 公司ID |
+| companyName | String | 公司ID、公司名称、企业代码不能同时为空 | 公司名 |
+| registerNo | String  | 公司ID、公司名称、企业代码不能同时为空 | 企业代码 |
+| mobile | String | 是 | 申请人手机号 |
 
 响应:
 
@@ -4385,20 +5538,7 @@ Content-Type： multipart/form-data
 | -------- | -------- | -------- |
 | code | Int | 响应码 |
 | message | String | 响应消息 |
-| result | CompanyAuth | 企业认证信息 |
-
-CompanyAuth:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| id | Long | 认证ID |
-| company | Long | 公司ID |
-| companyName | String | 公司名称 |
-| registerNo | String | 工商注册号 |
-| charger | String | 负责人名 |
-| mobile | String | 负责人手机号 |
-| legalPerson | String | 法人 |
-
+| authUrl | String | 企业变更信息链接 |
 
 响应码解释:
 
@@ -4411,37 +5551,16 @@ CompanyAuth:
 请求示例：
 ```HTTP
 
-POST /document/createbyhtml HTTP/1.1
+POST /company/changeinfo HTTP/1.1
 Host: hostname
 x-qys-accesstoken: AU4HofNTpo
-x-qys-signature: 0c43a5b98b64a82079ec73a0f221084e
+x-qys-signature: 0c43a5b98b64
 x-qys-timestamp: 0
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
-
-Content-Disposition: form-data; name="presentCompanyName"
-
-上好佳佳佳
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
 Content-Disposition: form-data; name="companyName"
 
-好好喝
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-Content-Disposition: form-data; name="license"; filename="/C:/Users/QYS/Desktop/Test/人脸.jpg
-
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-Content-Disposition: form-data; name="legalAuthorization"; filename="/C:/Users/QYS/Desktop/Test/授权.png
-
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-Content-Disposition: form-data; name="mobile"
-
-150000000000
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-Content-Disposition: form-data; name="legalPerson"
-
-张三
+测试企业
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ```
@@ -4450,36 +5569,7 @@ Content-Disposition: form-data; name="legalPerson"
 
 ```javascript
 {
-    "result": {
-        "id": "2580737657148346374",
-        "company": "2580695192379629614",
-        "companyName": "好好喝",
-        "registerNo": "7894563",
-        "charger": "王五",
-        "mobile": "123456789",
-        "legalPerson": "王五",
-        "license": "{\"name\":\"\\u4EBA\\u8138\",\"key\":\"20190624-d97f7dfb-ab88-4ad7-8537-230f4f78fbd1\",\"type\":\"jpg\"}",
-        "legalAuthorization": "{\"name\":\"\\u6388\\u6743\",\"key\":\"20190624-f64d46a5-e4bc-40f1-af0f-20f5525ae739\",\"type\":\"png\"}",
-        "accountAuth": false,
-        "basicInfoStep": "APPLIED",
-        "accountStep": "NONEED",
-        "basicRejectReason": "",
-        "accountName": "上海亘岩网络科技有限公司",
-        "bankName": "中国民生银行浦东支行",
-        "account": "6961677",
-        "money": 0.01,
-        "auditMode": "QIYUESUO",
-        "applyTime": "2019-06-24 19:30:05",
-        "status": 0,
-        "qiyuesuoAuthId": "2580737662491771903",
-        "companyType": 1,
-        "repeat": true,
-        "authContent": 3,
-        "isAllowdChangeName": true,
-        "changeLp": true,
-        "reauthentication": false,
-        "changeCompanyName": true
-    },
+    "authUrl": "https://auth.qiyuesuo.me/enterprise-m/corp/home?ticket=tfPKsx",
     "code": 0,
     "message": "SUCCESS"
 }
@@ -4541,6 +5631,288 @@ Content-Disposition: form-data; name="companyName"
 
 ```javascript
 
+{
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+### 3.1.8 冻结企业 
+
+描述：冻结非平台方的企业。
+
+Requset URL：/company/freeze
+
+Request Method：POST
+
+Content-Type： multipart/form-data
+
+参数：
+
+| 名称        | 类型   | 是否必须                     | 描述     |
+| ----------- | ------ | ---------------------------- | -------- |
+| companyId   | Long   | 公司ID与公司名称必须填写一个 | 公司ID   |
+| companyName | String | 公司ID与公司名称必须填写一个 | 公司名称 |
+
+响应：
+
+| 名称    | 类型   | 描述     |
+| ------- | ------ | -------- |
+| code    | Int    | 响应码   |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码  | 描述     |
+| ------- | -------- |
+| 0       | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+POST /company/freeze HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 0hniG
+x-qys-timestamp: 156507
+x-qys-signature: cfcea2dd
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="companyName"
+
+好好喝
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+```
+
+响应示例：
+
+```javascript
+{
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+### 3.1.9 解冻企业 
+
+描述：解冻冻结状态的企业。
+
+Requset URL：/company/unfreeze
+
+Request Method：POST
+
+Content-Type： multipart/form-data
+
+参数：
+
+| 名称        | 类型   | 是否必须                     | 描述     |
+| ----------- | ------ | ---------------------------- | -------- |
+| companyId   | Long   | 公司ID与公司名称必须填写一个 | 公司ID   |
+| companyName | String | 公司ID与公司名称必须填写一个 | 公司名称 |
+
+响应：
+
+| 名称    | 类型   | 描述     |
+| ------- | ------ | -------- |
+| code    | Int    | 响应码   |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码  | 描述     |
+| ------- | -------- |
+| 0       | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```java
+POST /company/unfreeze HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 0hniG
+x-qys-timestamp: 156507
+x-qys-signature: cfcea2dd
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="companyName"
+
+好好喝
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+### 3.1.10 企业经营状态详情
+
+描述：获取企业经营状态信息
+
+Request URL： /company/managestatus
+
+Request Method： GET
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | --------  | -------- | -------- |
+| companyId | Long | ID、名称和公司代码必须三选一 | 公司ID |
+| companyName | String | ID、名称和公司代码必须三选一 | 公司名称 |
+| registerNo | String | ID、名称和公司代码必须三选一 | 工商注册号 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result| Object | 公司经营信息，参考CorpCredit |
+
+CorpCredit：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| name | String | 公司名称 |
+| legalPerson | String | 法人姓名 |
+| registCapital | String | 注册资本 |
+| address | String | 地址 |
+| registerNo | String | 企业注册号 |
+| status | String | 企业经营状态 |
+| organizationNo | String | 组织机构号 |
+| creditNo | String | 统一社会信用代码 |
+| abnormalItems | List[AbnormalItem] | 经营异常信息 |
+| executions | List[Execution] | 严重违法失信企业名单（黑名单）信息 |
+| adminPunishs | List[AdminPunishment] | 行政处罚信息 |
+
+AbnormalItem（经营异常信息）:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| inReason | String | 列入经营异常原因 |
+| inDate | String | 列入时间 |
+| outReason | String | 移出经营异常原因 |
+| outDate | String | 移出时间 |
+| department | String | 做出决定的部门 |
+
+Execution（严重违法失信企业名单（黑名单）信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| inReason | String | 列入严重违法失信企业名单（黑名单）原因 |
+| inDate | String | 列入时间 |
+| inDepartment | String | 作出决定机关（列入）|
+| outReason | String | 移出经营异常原因 |
+| outDate | String | 移出时间 |
+| outDepartment | String | 作出决定机关（移出） |
+
+AdminPunishment（行政处罚信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| seq_no | String | 序号 |
+| number | String | 决定书文号 |
+| illegalType | String | 违法行为类型|
+| content | String | 行政处罚内容 |
+| department | String | 决定机关名称 |
+| date | String | 处罚决定日期 |
+| publishDate | String | 公示日期 |
+| description | String | 详情 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+
+请求示例：
+
+
+```HTTP
+
+GET /company/querystatus?companyName=测试企业公司 HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 7fES1m3Unv
+x-qys-timestamp: 0
+x-qys-signature: a91c189cf946
+
+```
+
+响应示例：
+
+```javascript
+
+{
+    "result": {
+        "name": "测试企业公司",
+        "address": "上海市奉贤区",
+        "status": "存续",
+        "legalPerson": "张三",
+        "registCapital": "100 万元人民币",
+        "registerNo": "45678912",
+        "organizationNo": "JAJJAHD1",
+        "creditNo": "ahsdiuashdaiudhaiu",
+        "abnormalItems": [
+            {
+                "department": "市场监督管理局",
+                "inReason": "无法联系",
+                "inDate": "2019-05-05",
+                "outReason": "申请移出",
+                "outDate": "2019-05-30"
+            }
+        ]
+    },
+
+### 3.1.9 解冻企业 
+
+描述：解冻冻结状态的企业。
+
+Requset URL：/company/unfreeze
+
+Request Method：POST
+
+Content-Type： multipart/form-data
+
+参数：
+
+| 名称        | 类型   | 是否必须                     | 描述     |
+| ----------- | ------ | ---------------------------- | -------- |
+| companyId   | Long   | 公司ID与公司名称必须填写一个 | 公司ID   |
+| companyName | String | 公司ID与公司名称必须填写一个 | 公司名称 |
+
+响应：
+
+| 名称    | 类型   | 描述     |
+| ------- | ------ | -------- |
+| code    | Int    | 响应码   |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码  | 描述     |
+| ------- | -------- |
+| 0       | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+​```java
+POST /company/unfreeze HTTP/1.1
+Host: hostname
+x-qys-accesstoken: 0hniG
+x-qys-timestamp: 156507
+x-qys-signature: cfcea2dd
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="companyName"
+
+好好喝
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+```
+
+响应示例：
+
+```javascript
 {
     "code": 0,
     "message": "SUCCESS"
@@ -4760,6 +6132,18 @@ UserAuthStatus：
 | mobile | String | 用户联系方式 |
 | cardNo | String | 用户身份证号码 |
 | status | String | 用户认证状态：AUTH_SUCCESS("已认证成功")，AUTH_FAILURE("认证失败") |
+| companies | List&lt;Company&gt; | 用户所在的公司信息 |
+
+Company：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司id |
+| name | String | 公司名称 |
+| status | TenantStatus | 公司状态；UNREGISTERED（未注册），REGISTERED（已注册），CERTIFYING（认证中），AUTH_SUCCESS（认证完成），AUTH_FAILURE（认证失败） |
+| tenantType | TenantType | 公司类型；CORPORATE（平台方），INNER_COMPANY（内部公司），COMPANY（外部公司） |
+| freeze | Boolean | 冻结或未冻结状态 |
+
 
 响应码解释:
 
@@ -4786,11 +6170,29 @@ x-qys-accesstoken: qAJeIep
 ```javascript
 {
     "result": {
-     	"id": "2462860567661903884",
-        "name": "邓哈哈",
-        "contact": "15122534215",
-        "cardNo": "421281293545199100",
-        "status": "AUTH_SUCCESS"
+        "id": "2595869369835479862",
+        "name": "小峰峰",
+        "mobile": "15505178555",
+        "cardNo": "32068378887887",
+        "status": "AUTH_SUCCESS",
+        "companies": [
+            {
+                "id": "2594737273725567704",
+                "name": "斯塔克工业总部",
+                "tenantType": "INNER_COMPANY",
+                "freeze": false,
+                "status": "AUTH_SUCCESS",
+                "certified": true
+            },
+            {
+                "id": "2570617114465419270",
+                "name": "维森集团有限公司",
+                "tenantType": "CORPORATE",
+                "freeze": false,
+                "status": "AUTH_SUCCESS",
+                "certified": true
+            }
+        ]
     },
     "code": 0,
     "message": "SUCCESS"
@@ -4971,7 +6373,7 @@ Content-Type： multipart/form-data
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| userId |	String | 用户ID与用户联系方式必须填写一项 | 用户手机号 |
+| userId |	String | 用户ID与用户联系方式必须填写一项 | 用户ID |
 | contact | String | 用户ID与用户联系方式必须填写一项 | 用户联系方式 |
 
 响应:
@@ -5004,6 +6406,70 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 Content-Disposition: form-data; name="contact"
 
 15000000000000
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+```
+
+响应示例：
+
+```javascript
+{
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
+### 3.2.8 用户修改手机号短信通知
+
+描述：用户修改手机号，向新手机号发送修改手机号的链接。
+
+Request URL：/user/changemobile
+
+Request Method：POST
+
+Content-Type： multipart/form-data
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| oldMobile | String | 是 | 用户旧手机号 |
+| newMobile | String | 是 | 用户新手机号 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+POST /user/changemobile HTTP/1.1
+Host: hostname
+x-qys-timestamp: 0
+x-qys-signature: 159da9d90dda41dac84920077fca37
+x-qys-accesstoken: qAJeIep
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+
+Content-Disposition: form-data; name="oldMobile"
+
+15000000000
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+Content-Disposition: form-data; name="newMobile"
+
+15000000001
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ```
@@ -5113,120 +6579,7 @@ x-qys-signature: be46397bdf7c78b9ec6eeb216f4af2e5
 }
 ```
 
-### 4.2  平台公司印章列表
-
-描述：获取平台印章列表。
-
-Request URL：/seal/list/platform
-
-Request Method： GET
-
-参数:
-
-| 名称 | 类型 | 是否必须 | 描述 |
-| -------- | -------- | -------- | -------- |
-| category | String	| 否 | 印章类型：PHYSICS("物理签章"),ELECTRONIC("电子签章"),默认查询电子章 |
-
-响应:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| code | Int | 响应码 |
-| message | String | 响应消息 |
-| list | Array[Seal] | 印章列表，参照Seal |
-
-Seal:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| id | Long | 印章ID |
-| owner | Long | 公司ID |
-| name | String | 印章名称 |
-| type | SealType | 印章类型，COMPANY("企业公章"),PERSONAL("个人签名"),LP("法定代表人章") |
-| spec  | SealSpec | 印章规格 |
-| sealKey  | String | 印章图片key |
-| createTime  | Date | 创建时间 |
-| status  | SealStatus | 印章状态，NORMAL("正常"),FREEZE("冻结"),DELETE("删除"),INVALID("失效") |
-| useCount | Integer | 印章使用的次数 |
-| category | String | 印章分类，PHYSICS(物理章),ELECTRONIC(电子章) |
-
-响应码解释:
-
-| 响应码 | 描述 |
-| -------- | -------- |
-| 0 | 请求成功 |
-| 1000000 | 未知错误 |
-| 1000001 | 参数错误 |
-
-请求示例：
-
-```HTTP
-
-GET /seal/list/platform  HTTP/1.1
-Host: hostname
-x-qys-accesstoken: INblkBaTJq
-x-qys-timestamp: 0
-x-qys-signature: be46397bdf7c78b9ec6eeb216f4af2e5
-
-```
-响应示例：
-
-```javascript
-{
-    "code": 0,
-    "message": "SUCCESS",
-    "list": [
-        {
-            "id": "2457407333014970396",
-            "owner": "2422043939275067412",
-            "name": "党纪委45mm",
-            "type": "COMPANY",
-            "spec": {
-                "height": 45,
-                "width": 45,
-                "type": "CIRCULAR",
-                "key": "CIRCULAR_45",
-                "pixelWidth": 127.56,
-                "pixelHeight": 127.56,
-                "label": "圆形（直径45mm）"
-            },
-            "sealKey": "20180719-ba9de4ec-f104-4a79-917d-a489b747cbb2",
-            "createTime": "2018-07-19 11:39:25",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "ELECTRONIC"
-        },
-        {
-            "id": "2457407488053223457",
-            "owner": "2422043939275067412",
-            "name": "工会公章42",
-            "type": "COMPANY",
-            "spec": {
-                "height": 42,
-                "width": 42,
-                "type": "CIRCULAR",
-                "key": "CIRCULAR_42",
-                "pixelWidth": 119.06,
-                "pixelHeight": 119.06,
-                "label": "圆形（直径42mm）"
-            },
-            "sealKey": "20180719-85a11e1a-753e-4a14-aa9e-3ea3f630bad4",
-            "createTime": "2018-07-19 11:40:02",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "ELECTRONIC"
-        }
-    ]
-}
-```
-
-### 4.3  公司印章列表
+### 4.2  公司印章列表
 
 描述：获取公司印章列表。
 
@@ -5343,255 +6696,7 @@ x-qys-signature: 426cfc4999d6d8393a0a7b83f135462e
 }
 ```
 
-### 4.4 所有印章列表
-
-描述：获取所有印章列表。
-
-Request URL：/seal/list/all
-
-Request Method： GET
-
-参数:
-
-| 名称 | 类型 | 是否必须 | 描述 |
-| -------- | -------- | -------- | -------- |
-| category | String	| 否 | 印章类型：PHYSICS("物理签章"),ELECTRONIC("电子签章"),不传默认查询电子章 |
-
-响应:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| code | Int | 响应码 |
-| message | String | 响应消息 |
-| result | Array[Seal] | 印章列表，参照Seal |
-
-Seal:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| id | Long | 印章ID |
-| owner | Long | 公司ID |
-| ownerName | String | 公司名称 |
-| name | String | 印章名称 |
-| type | SealType | 签章类型 |
-| spec  | SealSpec | 印章规格 |
-| sealKey  | String | 印章图片key |
-| createTime  | Date | 创建时间 |
-| status  | SealStatus | 印章状态 |
-| useCount | Integer | 印章使用的次数 |
-| category | String | 印章类型：PHYSICS("物理章"),ELECTRONIC("电子章") |
-
-响应码解释:
-
-| 响应码 | 描述 |
-| -------- | -------- |
-| 0 | 请求成功 |
-| 1000000 | 未知错误 |
-| 1000001 | 参数错误 |
-
-请求示例：
-
-```HTTP
-
-GET /seal/list/all HTTP/1.1
-Host: hostname
-x-qys-accesstoken: 7aeQSRqVxB
-x-qys-timestamp: 0
-x-qys-signature:1cecf913ed461506e289d83f8a892bad
-
-```
-响应示例：
-
-```javascript
-{
-    "code": 0,
-    "message": "SUCCESS",
-    "list": [
-        {
-            "id": "2500254964313427970",
-            "owner": "2422042838839468036",
-			"ownerName": "上海泛微网络科技股份有限公司",
-            "name": "物理用印测试章",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-14 17:20:36",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "2017091719438144",
-            "bluetooth": "8MNA09GA89F7",
-            "bindUkey": false
-        },
-        {
-            "id": "2500524031617163265",
-            "owner": "2422042838839468036",
-            "name": "aaaaa",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-15 11:09:47",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "12345678",
-            "bluetooth": "12345678",
-            "location": "上海闵行",
-            "bindUkey": false
-        },
-        {
-            "id": "2500525266219139073",
-            "owner": "2422042838839468036",
-            "name": "bbbbbb",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-15 11:14:41",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "123456789",
-            "bluetooth": "123456789",
-            "location": "上海闵行",
-            "bindUkey": false
-        }
-    ]
-}
-```
-
-### 4.5 印章列表（包含OA用户）
-
-描述：获取所有印章列表，包含印章使用者的oaId。
-
-Request URL：/seal/oa/all
-
-Request Method： GET
-
-参数:
-
-| 名称 | 类型 | 是否必须 | 描述 |
-| -------- | -------- | -------- | -------- |
-| category | String	| 否 | 印章类型：PHYSICS("物理签章"),ELECTRONIC("电子签章"),不传默认查询电子章 |
-
-响应:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| code | Int | 响应码 |
-| message | String | 响应消息 |
-| result | Array[Seal] | 印章列表，参照Seal |
-
-Seal:
-
-| 名称 | 类型 | 描述 |
-| -------- | -------- | -------- |
-| id | Long | 印章ID |
-| owner | Long | 公司ID |
-| ownerName | String | 公司名称 |
-| name | String | 印章名称 |
-| type | SealType | 签章类型 |
-| spec  | SealSpec | 印章规格 |
-| sealKey  | String | 印章图片key |
-| createTime  | Date | 创建时间 |
-| status  | SealStatus | 印章状态 |
-| useCount | Integer | 印章使用的次数 |
-| category | String | 印章类型：PHYSICS("物理章"),ELECTRONIC("电子章") |
-| oaUserIds | String | oa用户Id（用逗号隔开）|
-
-响应码解释:
-
-| 响应码 | 描述 |
-| -------- | -------- |
-| 0 | 请求成功 |
-| 1000000 | 未知错误 |
-| 1000001 | 参数错误 |
-
-请求示例：
-
-```HTTP
-
-GET /seal/oa/all HTTP/1.1
-Host: hostname
-x-qys-accesstoken: 7aeQSRqVxB
-x-qys-timestamp: 0
-x-qys-signature:1cecf913ed461506e289d83f8a892bad
-
-```
-响应示例：
-
-```javascript
-{
-    "code": 0,
-    "message": "SUCCESS",
-    "list": [
-        {
-            "id": "2500254964313427970",
-            "owner": "2422042838839468036",
-		   "ownerName": "上海泛微网络科技股份有限公司",
-            "name": "物理用印测试章",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-14 17:20:36",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "2017091719438144",
-            "bluetooth": "8MNA09GA89F7",
-            "bindUkey": false,
-            "oaUserIds": "789456,12313546,"
-        },
-        {
-            "id": "2500524031617163265",
-            "owner": "2422042838839468036",
-            "name": "aaaaa",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-15 11:09:47",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "12345678",
-            "bluetooth": "12345678",
-            "location": "上海闵行",
-            "bindUkey": false,
-            "oaUserIds": ""
-        },
-        {
-            "id": "2500525266219139073",
-            "owner": "2422042838839468036",
-            "name": "bbbbbb",
-            "type": "COMPANY",
-            "sealKey": "",
-            "createTime": "2018-11-15 11:14:41",
-            "status": {
-                "description": "正常",
-                "key": "NORMAL"
-            },
-            "useCount": 0,
-            "category": "PHYSICS",
-            "deviceId": "123456789",
-            "bluetooth": "123456789",
-            "location": "上海闵行",
-            "bindUkey": false,
-            "oaUserIds": ""
-        }
-    ]
-}
-```
-
-### 4.6 创建企业公章
+### 4.3 创建企业公章
 
 描述：通过用户上传的base64格式图片，创建公司印章。
 
@@ -5711,7 +6816,7 @@ companyName=%E7%BE%8E%E5%9B%A2&image=iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmH
 }
 ```
 
-### 4.8 获取印章详情
+### 4.4 获取印章详情
 
 Request URL：/seal/detail
 
@@ -5738,7 +6843,6 @@ Seal:
 | id | Long | 印章ID |
 | owner | Long | 公司ID |
 | name | String | 印章名称 |
-| otherName | String | 印章别名 |
 | type | SealType | 签章类型 |
 | spec  | SealSpec | 印章规格 |
 | sealKey  | String | 印章图片key |
@@ -5756,8 +6860,6 @@ User:
 | name | String | 用户名 |
 | mobile | String | 手机号 |
 | email | String | 邮箱 |
-| contact | String | 联系方式 |
-| certified | boolean | 是否认证成功 |
 | createTime | Date | 创建时间 |
 
 Employee:	
@@ -5767,11 +6869,8 @@ Employee:
 | id | Long | 员工Id |
 | name | String | 员工名 |
 | mobile | String | 手机号 |
-| sa | boolean | 是否印章管理员 |
-| admin | boolean | 是否系统管理员 |
-| lp | boolean | 是否为法人 |
-| contractAdmin | boolean | 是否是合同管理员 |
-| nickName | String | 员工昵称 |
+| email | String | 邮箱 |
+| number | String | 员工编号 |
 
 响应码解释:
 
@@ -5831,21 +6930,14 @@ Postman-Token: 2c909fb7-c822-6923-26b3-1f8dabb5c2d6
                 "name": "邓茜茜",
                 "mobile": "15021504325",
                 "email": "874500173@qq.com",
-                "createTime": "2018-04-12 21:33:33",
-                "contact": "15021504325",
-                "certified": false
+                "createTime": "2018-04-12 21:33:33"
             }
         ],
         "employees": [
             {
                 "id": "2422042843449008143",
                 "name": "邓茜茜",
-                "mobile": "15021504325",
-                "sa": false,
-                "admin": false,
-                "lp": false,
-                "contractAdmin": false,
-                "nickName": "邓茜茜"
+                "mobile": "15021504325"
             }
         ]
     },
@@ -5854,7 +6946,7 @@ Postman-Token: 2c909fb7-c822-6923-26b3-1f8dabb5c2d6
 
 ```
 
-### 4.9 获取印章图片
+### 4.5 获取印章图片
 
 Request URL：/seal/image
 
@@ -5867,7 +6959,6 @@ Content-Type： application/x-www-form-urlencoded
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
 | sealId   | String | 否 | 印章ID |
-| sealOtherName | String | 否 | 印章别名，印章ID与印章别名至少存在一个 |
 
 响应:
 
@@ -5880,7 +6971,7 @@ Content-Type：image/png
 
 ```HTTP
 
-GET /seal/image?sealId=2494785477926060041&sealOtherName=别名 HTTP/1.1
+GET /seal/image?sealId=2494785477926060041 HTTP/1.1
 Host: privopen.qiyuesuo.me
 x-qys-accesstoken: seUTZBNQua
 x-qys-timestamp: 0
@@ -5900,7 +6991,7 @@ content-type →image/png
 
 ```
 
-### 4.10 获取用户可使用印章
+### 4.6 获取用户可使用印章
 
 描述：获取当前用户可使用的印章
 
@@ -5940,6 +7031,7 @@ Seal:
 | status  | SealStatus | 印章状态 |
 | useCount | Integer | 印章使用的次数 |
 | category | String | 印章类型：物理章，电子章 |
+| sealCategoryName | String | 印章分类名称 |
 
 响应码解释:
 
@@ -6017,7 +7109,7 @@ x-qys-signature: e19dd29e1286024b2cbc98f743c432d6
 }
 ```
 
-### 4.11 获取个人用户印章图片
+### 4.7 获取个人用户印章图片
 
 Request URL：/seal/personalsealimage
 
@@ -6062,7 +7154,7 @@ content-type →image/png
 
 ```
 
-### 4.12 批量下载个人签名图片
+### 4.8 批量下载个人签名图片
 
 描述：用于获取个人签名图片，根据时间区间获取，默认获取所有个人签名，以压缩包(.zip)格式返回。
 
@@ -6096,7 +7188,7 @@ Content-Type →application/zip
 Content-Disposition →attachment;fileName=2252412945004756992.zip 
 ```
 
-### 4.13 获取时间戳图片
+### 4.9 获取时间戳图片
 
 Request URL：/seal/timestampimage
 
@@ -6126,6 +7218,116 @@ x-qys-signature: 426cfc4999d6d8393a0a7b83f135462e
 cache-control →no-store, no-cache
 content-type →image/png
 
+```
+
+### 4.10  所有内部企业的印章列表
+
+描述：获取所有内部企业包含平台方的印章列表。
+
+Request URL：/seal/innercompany/seallist
+
+Request Method： GET
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| category | String | 否 | 印章类型：PHYSICS("物理签章"),ELECTRONIC("电子签章"),不传默认查询电子章 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result | Array[Company] | 公司列表，参照Company |
+
+Company(公司信息)：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司ID |
+| name | String | 公司名称 |
+| status | String | 公司状态：UNREGISTERED("未注册"),REGISTERED("已注册"),CERTIFYING("认证中"),AUTH_SUCCESS("认证完成"),AUTH_FAILURE("认证失败") |
+| charger | String | 管理员名称 |
+| seals | Array[Seal] | 印章列表，参考Seal |
+
+Seal:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 印章ID |
+| owner | Long | 公司ID |
+| name | String | 印章名称 |
+| type | SealType | 印章类型，COMPANY("企业公章"),PERSONAL("个人签名"),LP("法定代表人章") |
+| spec  | SealSpec | 印章规格 |
+| sealKey  | String | 印章图片key |
+| createTime  | Date | 创建时间 |
+| status  | SealStatus | 印章状态，NORMAL("正常"),FREEZE("冻结"),DELETE("删除"),INVALID("失效") |
+| useCount | Integer | 印章使用的次数 |
+| category | String | 印章分类，PHYSICS(物理章),ELECTRONIC(电子章) |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+GET /seal/innercompany/seallist HTTP/1.1
+Host: hostname
+x-qys-accesstoken: seUTZBNQua
+x-qys-timestamp: 0
+x-qys-signature: 426cfc4999
+
+```
+响应示例：
+
+```javascript
+{
+    "result": [
+        {
+            "id": "2570617114465419270",
+            "name": "维森集团有限公司",
+            "status": "AUTH_SUCCESS",
+            "charger": "沈文强",
+            "province": "上海",
+            "seals": [
+                {
+                    "id": "2570617118953324556",
+                    "owner": "2570617114465419270",
+                    "name": "企业公章",
+                    "type": "COMPANY",
+                    "spec": {
+                        "height": 42,
+                        "width": 42,
+                        "type": "CIRCULAR",
+                        "pixelWidth": 119.06,
+                        "pixelHeight": 119.06,
+                        "label": "圆形（直径42mm）",
+                        "key": "CIRCULAR_42"
+                    },
+                    "sealKey": "20190704-9204aaab-88a0-4dc1-a432",
+                    "createTime": "2019-05-27 21:14:40",
+                    "status": {
+                        "description": "正常",
+                        "key": "NORMAL"
+                    },
+                    "useCount": 807,
+                    "category": "ELECTRONIC"
+                }
+            ],
+            "certified": true
+        }
+    ],
+    "code": 0,
+    "message": "SUCCESS"
+}
 ```
 
 # 5 业务分类接口
@@ -6477,6 +7679,217 @@ x-qys-signature: 426cfc4999d6d8393a0a7b83f135462e
             }
         ]
     },
+    "code": 0,
+    "message": "SUCCESS"
+}
+```
+
+### 5.4 所有内部企业的业务分类分组
+
+描述：查询所有内部企业下业务分类的分组，返回的分组结构与契约锁私有云中的分组结构一致。
+
+Request URL：/contract/categorygroup/list
+
+Request Method： GET
+
+参数: 无
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result  | Array[Company] | 该公司业务分类分组列表 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+Company(公司信息)：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 公司ID |
+| name | String | 公司名称 |
+| charger | String | 管理员名称 |
+| categoryGroups | Array[CategoryGroup] | 模板分组，参考CategoryGroup |
+
+CategoryGroup（分组信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 业务分类的分组ID |
+| name | String |业务分类的分组名称|
+| categoryCount | Int | 分组中所有的业务分类数量 |
+| disableCount | Int | 分组中已停用的业务分类数量 |
+| createTime | String | 分类创建时间，格式yyyy-MM-dd HH:mm:ss |
+| children | Array[CategoryGroup] | 该分组下的子分组列表 |
+| categoryList | Array[Category] | 该分组下的业务分类 |
+
+Category（业务分类信息）：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 业务分类ID |
+| type | String | 分类类型:ELECTRONIC（电子合同分类），PHYSICAL（物理用印分类） |
+| name | String | 业务分类名称 |
+| tenantId | Long | 公司ID |
+| createTime | Date | 创建时间 |
+| primary | Boolean | 是否为默认类型 |
+| state | Integer | 业务分类状态 0：启用， 1：停用， 2：逻辑删除 |
+
+请求示例：
+
+```HTTP
+
+GET /contract/categorygroup/list HTTP/1.1
+Host: hostname
+x-qys-accesstoken: seUTZBNQua
+x-qys-timestamp: 0
+x-qys-signature: 426cfc49
+
+```
+
+响应示例：
+
+```javascript
+{
+    "result": [
+        {
+            "id": "2570831992022863878",
+            "name": "lyc_ms",
+            "status": "AUTH_SUCCESS",
+            "charger": "李燕超",
+            "province": "上海",
+            "categoryGroups": [
+                {
+                    "id": "2581711513355632750",
+                    "name": "lyc_ms",
+                    "companyId": "2570831992022863878",
+                    "leftValue": 0,
+                    "rightValue": 7,
+                    "level": 0,
+                    "categoryCount": 23,
+                    "disableCount": 1,
+                    "createTime": "2019-06-27 11:59:50",
+                    "children": [
+                        {
+                            "id": "2581711513913475183",
+                            "name": "总部业务分类配置",
+                            "companyId": "2570831992022863878",
+                            "leftValue": 1,
+                            "rightValue": 4,
+                            "level": 1,
+                            "categoryCount": 17,
+                            "disableCount": 1,
+                            "createTime": "2019-06-27 11:59:50",
+                            "children": [
+                                {
+                                    "id": "2583218861745062259",
+                                    "name": "7-1",
+                                    "companyId": "2570831992022863878",
+                                    "leftValue": 2,
+                                    "rightValue": 3,
+                                    "level": 2,
+                                    "categoryCount": 7,
+                                    "disableCount": 1,
+                                    "createTime": "2019-07-01 15:49:30",
+                                    "parentId": "2581711513913475183",
+                                    "categoryList": [
+                                        {
+                                            "id": "2599516299089809413",
+                                            "name": "默认分类9999",
+                                            "type": "ELECTRONIC",
+                                            "tenantId": "2570831992022863878",
+                                            "createTime": "2019-08-15 15:09:42",
+                                            "primary": false,
+                                            "state": 0,
+                                            "downloadSwitch": true,
+                                            "printSwitch": true,
+                                            "groupId": "2583218861745062259",
+                                            "groupName": "7-1",
+                                            "canSend": true,
+                                            "viewAllContract": false,
+                                            "faceSign": false,
+                                            "signatoryCount": 0,
+                                            "entityName": "默认分类9999",
+                                            "entityId": "2599516299089809413"
+                                        }
+                                    ],
+                                    "child": false
+                                }
+                            ],
+                            "parentId": "2581711513355632750",
+                            "categoryList": [
+                                {
+                                    "id": "2596198350334755025",
+                                    "name": "hytest",
+                                    "type": "PHYSICAL",
+                                    "tenantId": "2570831992022863878",
+                                    "createTime": "2019-08-06 11:25:21",
+                                    "primary": false,
+                                    "state": 0,
+                                    "downloadSwitch": true,
+                                    "printSwitch": true,
+                                    "groupId": "2581711513913475183",
+                                    "groupName": "总部业务分类配置",
+                                    "canSend": true,
+                                    "viewAllContract": false,
+                                    "faceSign": false,
+                                    "signatoryCount": 0,
+                                    "entityName": "hytest",
+                                    "entityId": "2596198350334755025"
+                                }
+                            ],
+                            "child": true
+                        },
+                        {
+                            "id": "2594061203830853634",
+                            "name": "测试1",
+                            "companyId": "2570831992022863878",
+                            "leftValue": 5,
+                            "rightValue": 6,
+                            "level": 1,
+                            "categoryCount": 6,
+                            "disableCount": 0,
+                            "createTime": "2019-07-31 13:53:06",
+                            "parentId": "2581711513355632750",
+                            "categoryList": [
+                                {
+                                    "id": "2601627121277472785",
+                                    "name": "测试分类",
+                                    "type": "ELECTRONIC",
+                                    "tenantId": "2570831992022863878",
+                                    "createTime": "2019-08-21 10:57:21",
+                                    "primary": false,
+                                    "state": 0,
+                                    "downloadSwitch": true,
+                                    "printSwitch": true,
+                                    "groupId": "2594061203830853634",
+                                    "groupName": "测试1",
+                                    "canSend": true,
+                                    "canAllView": true,
+                                    "viewAllContract": false,
+                                    "faceSign": false,
+                                    "signatoryCount": 0,
+                                    "entityName": "测试分类",
+                                    "entityId": "2601627121277472785"
+                                }
+                            ],
+                            "child": false
+                        }
+                    ],
+                    "child": true
+                }
+            ],
+            "certified": true
+        }
+    ],
     "code": 0,
     "message": "SUCCESS"
 }
@@ -6848,19 +8261,23 @@ Content-Type： application/json
 | -------- | -------- | -------- | -------- |
 | tenantName | String | 是 | 发起公司 |
 | subject | String | 是 | 主题 |
+| categoryId | Long | 否 | 业务分类id |
 | serialNo | String | 否 | 序列号 |
 | description | String | 否 | 描述 |
 | applyerName | String | 否 | 申请人姓名 |
 | applyerContact | String | 联系方式与员工编号必须二选一 | 申请人联系方式 |
 | applyerNumber | String | 联系方式与员工编号必须二选一 | 申请人员工编号， |
-| callbackUrl | String | 否 | 回调地址 |
 | auths | Array[SealAuthBean] | 是 | 用印授权人；参照SealAuthBean |
+| documents | Array[Long] | 否 | 文档ID的集合 |
+| forms | Array[Form] | 否 | 第三方传入的表单集合,参照Form |
 
 SealAuthBean（用印授权）：
 
 | 名称 | 类型 | 是否必须 | 描述 |
 | -------- | -------- | -------- | -------- |
-| deviceNo | String | 是 | 授权印章识别码 |
+| deviceNo | String | deviceNo与sealName至少填写一个| 授权印章识别码 |
+| sealName | String | deviceNo与sealName至少填写一个 | 授权印章名称 |
+| ownerName | String | 否 | 印章所属公司名称 |
 | count | int | 是 | 授权次数 |
 | startTime | Date | 否 | 授权使用开始时间,格式样例：2019-04-09 09:18:53 |
 | endTime | Date | 否  | 授权使用结束时间,格式样例：2019-04-09 09:18:53 |
@@ -6872,6 +8289,13 @@ Employee（用印授权人）:
 | -------- | -------- | -------- | -------- |
 | mobile | String | 联系手机号与员工编号至少填写一个 | 授权人手机号 |
 | number | String | 联系手机号与员工编号至少填写一个 | 授权人员工编号 |
+
+Form(第三方表单):
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| key | String | 是 | 键 |
+| value | String | 是 | 值 |
 
 响应：
 
@@ -6899,6 +8323,9 @@ sealAuth：
 | vertifyCode | String | 授权用印码 |
 | contact | String | 授权人手机号 |
 | number | String | 授权人员工编号 |
+| sealName | String | 授权的印章名称 |
+| ownerName | String | 授权的印章所属公司名称 |
+| deviceNo | String | 授权的印章编号 |
 
 响应码解释:
 
@@ -6928,7 +8355,8 @@ Content-Type:application/json
 	"description":"描述",
 	"auths":[
 		{
-			"deviceNo":"201810091143943F",
+			"sealName":"物理章1",
+			"ownerName":"契约锁",
 			"count":4,
 			"users":[
 				{
@@ -6965,7 +8393,9 @@ Content-Type:application/json
                 "vertifyCode": "835200",  
                 "contact": "150000000000" ,  
 				"number": "000008", 
-				"sealId": "2525602783620960258", 
+				"sealId": "2525602783620960258",
+				"sealName": "物理章",
+				"ownerName": "契约锁", 
 				"deviceNo": "201810091143943F" 
             }
         ],
@@ -7523,6 +8953,426 @@ x-qys-timestamp: 0
 
 Cache-control →no-store, no-cache
 Content-type →image/png
+```
+
+### 8.10 上传用印图片
+
+描述：用于补传用户缺少的用印图片;若是开放平台接口发起的物理用印申请则填businessId、contact、number字段或sealAuthId字段;若是契约锁页面(即APP)发起，则需要传递sealAuthId字段;其他两个字段-images、type传参逻辑相同。
+
+Request URL：/seal/apply/images
+
+Request Method： POST
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| images | file | 是 | 要上传的图片 |
+| sealAuthId | Long | 否 | 该次用印的授权id |
+| type | String | 否 | 图片类型，FACE(人脸),SIGNATORY(用印),默认值：SIGNATORY |
+| businessId | Long | 否 | 申请id，若不传sealAuthId，则此字段必填 |
+| contact | Long | 否 | 用户联系方式，若不传sealAuthId，则此字段和number字段必填一个 |
+| number | Long | 否 | 用户工号，若不传sealAuthId，则此字段和contact字段必填一个 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+POST /seal/apply/images HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Content-Type: multipart/form-data; boundary=----
+Content-Disposition: form-data; name="file"; filename="/D:/用印图片.jpg
+
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+```
+
+响应示例:
+
+```HTTP
+
+Cache-control →no-store, no-cache
+Content-type →image/png
+```
+
+### 8.11 获取用户拖欠用印图片的用印记录
+
+描述：申请人申请用印申请时，若开启校验机制，则当申请人存在用印次数大于用印图片的情况，则无法发起新的用印申请。
+
+Request URL：/seal/apply/owe/auths
+
+Request Method： GET
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| contact | String | 否 | 用户联系方式，与number字段必填一个 |
+| number | String | 否 | 用户编号，与contact字段必填一个 |
+
+响应:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Int | 响应码 |
+| message | String | 响应消息 |
+| result | List | 结果集 |
+
+result数组字段解释:
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| subject | String | 拖欠图片的用印申请主题 |
+| oweUseImageCount | String | 拖欠的图片数量 |
+| id | Long | 用印授权id |
+| businessId | Long | 用印的申请id |
+| useImageCount | int | 上传的用印图片数量 |
+| usedCount | int | 用印次数 |
+
+结果集解释:
+
+当result字段存在且长度大于0时，则存在当前申请人有用印次数大于用印图片的记录，申请人无法发起新的用印申请。
+
+请求示例：
+
+```HTTP
+
+GET /seal/apply/owe/auths?contact=152****5948 HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+
+```
+
+响应示例:
+
+```HTTP
+{
+    "code": 0,
+    "result": [
+    		{
+			"id": "2586460805589585960",
+			"tenantId": "2570831992022863878",
+			"userId": "2571639022552441110",
+			"userName": "李**",
+			"businessId": "2586460804993994784",
+			"sealId": "2581787213849497744",
+			"subject": "长期按压印章测试1",
+			"vertifyCode": "190123",
+			"createTime": "2019-07-10 14:31:50",
+			"complete": true,
+			"completeTime": "2019-07-10 14:37:17",
+			"oweUseImageCount": 3
+		}
+    ],
+    "message": "SUCCESS"
+}
+```
+
+### 8.12 通过业务分类发起用印
+
+描述：用于开放平台接口使用业务分类发起用印
+
+Request URL： /seal/apply/mulitipleByCategory
+
+Request Method： POST
+
+Content-Type： application/json
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| tenantName | String | 否 | 发起公司, 业务分类id为空时必传 |
+| categoryId | Long | 否 | 业务分类id |
+| categoryName | String | 否 | 业务分类名称, 业务分类id为空时必传 |
+| subject | String | 是 | 主题 |
+| serialNo | String | 否 | 序列号 |
+| description | String | 否 | 描述 |
+| applyerName | String | 否 | 申请人姓名 |
+| applyerContact | String | 联系方式与员工编号必须二选一 | 申请人联系方式 |
+| applyerNumber | String | 联系方式与员工编号必须二选一 | 申请人员工编号 |
+| callbackUrl | String | 否 | 回调地址 |
+| auths | Array[SealAuthBean] | 是 | 用印授权人；参照SealAuthBean |
+| flowNodes | Array[ThirdFlowNode] | 是 | 第三方审批节点；参照ThirdFlowNode |
+| documents | Array[Long] | 否 | 文档ID的集合 |
+| forms | Array[Form] | 否 | 第三方传入的表单集合,参照Form |
+
+SealAuthBean（用印授权）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| deviceNo | String | deviceNo与sealName至少填写一个| 授权印章识别码 |
+| sealName | String | deviceNo与sealName至少填写一个 | 授权印章名称 |
+| ownerName | String | sealName不为空时必填 | 印章所属公司名称 |
+| count | int | 是 | 授权次数 |
+| startTime | Date | 否 | 授权使用开始时间,格式样例：2019-04-09 09:18:53 |
+| endTime | Date | 否  | 授权使用结束时间,格式样例：2019-04-09 09:18:53 |
+
+ThirdFlowNode（第三方审批节点）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| name | String | 是 | 节点名称 |
+| category | String | 是 | 固定为SEAL_AUDIT |
+| createTime | Date | 是 | 开始时间 |
+| completeTime | Date | 是 | 完成时间 |
+| operatorData | OperatorData | 是 | 操作数据,见OperatorData |
+
+OperatorData（第三方节点操作数据）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| operateType | String | 是 | 固定为approve |
+| info | String | 是 | 操作信息 |
+| operatorTime | Date | 是 | 操作时间 |
+| operator | Operator | 是 | 操作人,见Operator |
+
+Operator（第三方节点操作人）：
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| mobile | String | mobile和number至少填写一个 | 联系方式 |
+| number | String | mobile和number至少填写一个 | 员工编号 |
+
+Form(第三方表单):
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| key | String | 是 | 键 |
+| value | String | 是 | 值 |
+
+响应：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| code | Integer | 响应码 |
+| message | String | 响应信息 |
+| result  | SealApplyBean | 返回结果；参照SealApplyBean |
+
+SealApplyBean：
+
+| 名称 | 类型 | 描述 |
+| -------- | -------- | -------- |
+| id | Long | 业务主键 |
+| status | String | 申请状态 |
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+POST /seal/apply/multiple HTTP/1.1
+Host: hostname
+x-qys-accesstoken:jlmi3OxWrj
+x-qys-timestamp:0
+x-qys-signature:9537c7ab5ad6bbe25ac76de126a27981
+Content-Type:application/json
+
+{
+	"tenantName":"上海契约锁网络科技有限公司",
+    "categoryId":"2596607614068138038",
+	"subject":"测试发起2",
+	"serialNo":"test-000002",
+	"applyerContact":"13588889999",
+	"description":"描述",
+	"auths":[
+		{
+			"sealName":"物理章1",
+			"ownerName":"契约锁",
+			"count":4
+		},
+		{
+			"deviceNo":"201810091143943E",
+			"count":6
+		}
+	]
+}
+```
+
+响应示例:
+
+```javascript
+{
+    "result": {
+        "id": "2598424636884172818",
+        "status": "USING"
+    },
+    "code": 0,
+    "message": "SUCCESS"
+}
+
+```
+
+### 8.13 用印后文件上传(图片列表)
+
+描述：用于开放平台接口在用印完成后上传用印文件的图片列表, 系统会自动转换为pdf
+
+Request URL： /seal/apply/used/images
+
+Request Method： POST
+
+Content-Type： form/data
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| businessId | String | 是 | 用印申请id |
+| images | Array[MultipartFile] | 是 | 用印文件的图片列表,支持jpg,jpeg,gif,png,tiff |
+| title | String | 是 | 文件标题 |
+
+请求示例：
+
+```HTTP
+
+POST /seal/apply/used/file HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Content-Type: multipart/form-data; boundary=----
+Content-Disposition: form-data; name="images"; filename="/D:/用印文件.pdf"
+
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="businessId"
+
+2598426864373596177
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+文件标题
+```
+
+### 8.14 用印后文件上传
+
+描述：用于开放平台接口在用印完成后上传用印文件
+
+Request URL： /seal/apply/used/file
+
+Request Method： POST
+
+Content-Type： form/data
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| businessId | String | 是 | 用印申请id |
+| file | MultipartFile | 是 | 用印文件,只支持docx和pdf |
+| title | String | 是 | 文件标题 |
+
+请求示例：
+
+```HTTP
+
+POST /seal/apply/used/file HTTP/1.1
+Host: hostname
+x-qys-accesstoken: cwdYln1l6e
+x-qys-signature: b267a7887b08af7230bab8c956a1f07e
+x-qys-timestamp: 0
+Content-Type: multipart/form-data; boundary=----
+Content-Disposition: form-data; name="file"; filename="/D:/用印文件.pdf"
+
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="businessId"
+
+2598426864373596177
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+文件标题
+
+```
+### 8.15 修改用印时间
+
+描述：用于修改用印的开始和结束时间
+
+Request URL：/seal/apply/updateUseSealTime
+
+Request Method： POST
+
+Content-Type： application/json
+
+参数:
+
+| 名称 | 类型 | 是否必须 | 描述 |
+| -------- | -------- | -------- | -------- |
+| businessId | String | 是 | 用印申请id |
+| deviceNo | String | 否 | 授权印章识别码  |
+| sealName | String | 否 | 印章名称 |
+| ownerName | String | 否 | 公司名称 |
+| startTime | Date | 是 | 开始时间 |
+| endTime | Date | 是 | 结束时间 |
+参数备注:当deviceNo、sealName、ownerName都不传参,默认更新当前用印所有未结束的印章使用时间。
+
+响应码解释:
+
+| 响应码 | 描述 |
+| -------- | -------- |
+| 0 | 请求成功 |
+| 1000000 | 未知错误 |
+| 1000001 | 参数错误 |
+
+请求示例：
+
+```HTTP
+
+POST /seal/apply/updateUseSealTime HTTP/1.1
+Host: hostname
+x-qys-accesstoken:jlmi3OxWrj
+x-qys-timestamp:0
+x-qys-signature:9537c7ab5ad6bbe25ac76de126a27981
+Content-Type:application/json
+{
+	"businessId":"2598875823213387783",
+	"sealName":"1",
+	"deviceNo":"",
+	"ownerName":"",
+	"startTime":"2019-08-27 11:07:51",
+	"endTime":"2019-08-28 11:07:52"
+}
+```
+
+响应示例:
+
+```javascript
+{
+    "code": 0,  
+    "message": "SUCCESS" 
+}
 ```
 
 # 9 存证接口
