@@ -41,6 +41,7 @@ public class DynamicContractService {
 	
 	private CreateContractRequest buildBasicRequest(Sender sender, Long documentId) {
 		CreateContractRequest request = new CreateContractRequest();
+		request.setTenantName(sender.getTenantName()); // 设置合同发起方
 		request.setCategoryId(sender.getCategoryId()); // 业务分类ID，非必填（为空时使用默认业务分类），业务分类在签章平台“配置-业务流配置”中创建、查看
 		request.setCreatorName(sender.getCreatorName()); // 创建人姓名，非必填
 		request.setCreatorContact(sender.getCreatorContact()); // 创建人联系方式，非必填
